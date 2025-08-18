@@ -19,22 +19,38 @@ export const StarRating: React.FC<StarRatingProps> = ({
   readonly = false
 }) => {
   const [hoverValue, setHoverValue] = useState<number | null>(null);
+  const [lastClickTime, setLastClickTime] = useState<number>(0);
+  const [lastClickedStar, setLastClickedStar] = useState<number>(-1);
   
   const sizeClasses = {
-    sm: 'h-4 w-4',
-    md: 'h-5 w-5',
-    lg: 'h-6 w-6'
+    sm: 'h-6 w-6',
+    md: 'h-8 w-8',
+    lg: 'h-10 w-10'
   };
 
-  const handleClick = (starIndex: number, isHalf: boolean) => {
+  const handleClick = (starIndex: number) => {
     if (readonly) return;
-    const newValue = starIndex + (isHalf ? 0.5 : 1);
-    onChange(newValue);
+    
+    const currentTime = Date.now();
+    const isDoubleClick = currentTime - lastClickTime < 300 && lastClickedStar === starIndex;
+    
+    setLastClickTime(currentTime);
+    setLastClickedStar(starIndex);
+    
+    if (isDoubleClick) {
+      // Double click - set half star
+      const newValue = starIndex + 0.5;
+      onChange(newValue);
+    } else {
+      // Single click - set full star
+      const newValue = starIndex + 1;
+      onChange(newValue);
+    }
   };
 
-  const handleMouseEnter = (starIndex: number, isHalf: boolean) => {
+  const handleMouseEnter = (starIndex: number) => {
     if (readonly) return;
-    const newValue = starIndex + (isHalf ? 0.5 : 1);
+    const newValue = starIndex + 1;
     setHoverValue(newValue);
   };
 
@@ -54,28 +70,17 @@ export const StarRating: React.FC<StarRatingProps> = ({
 
   return (
     <div className="flex items-center gap-1">
-      <div className="flex items-center">
+      <div className="flex items-center justify-center">
         {Array.from({ length: maxStars }, (_, index) => {
           const fill = getStarFill(index);
           return (
             <div 
               key={index} 
               className="relative cursor-pointer"
+              onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={handleMouseLeave}
+              onClick={() => handleClick(index)}
             >
-              {/* Left half */}
-              <div
-                className="absolute left-0 top-0 w-1/2 h-full z-10"
-                onMouseEnter={() => handleMouseEnter(index, true)}
-                onClick={() => handleClick(index, true)}
-              />
-              {/* Right half */}
-              <div
-                className="absolute right-0 top-0 w-1/2 h-full z-10"
-                onMouseEnter={() => handleMouseEnter(index, false)}
-                onClick={() => handleClick(index, false)}
-              />
-              
               <Star 
                 className={`
                   ${sizeClasses[size]} 
