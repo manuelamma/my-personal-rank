@@ -20,9 +20,9 @@ export const sortItemsByScore = (items: RankingItem[]): RankingItem[] => {
 };
 
 export const getTierLevel = (score: number): { name: string; color: string; cssClass: string } => {
-  if (score >= 8.5) return { name: 'S', color: 'tier-s', cssClass: 'bg-tier-s text-white' };
-  if (score >= 7.0) return { name: 'A', color: 'tier-a', cssClass: 'bg-tier-a text-white' };
-  if (score >= 5.5) return { name: 'B', color: 'tier-b', cssClass: 'bg-tier-b text-white' };
-  if (score >= 4.0) return { name: 'C', color: 'tier-c', cssClass: 'bg-tier-c text-white' };
+  if (score >= 4.25) return { name: 'S', color: 'tier-s', cssClass: 'bg-tier-s text-white' };
+  if (score >= 3.5) return { name: 'A', color: 'tier-a', cssClass: 'bg-tier-a text-white' };
+  if (score >= 2.75) return { name: 'B', color: 'tier-b', cssClass: 'bg-tier-b text-white' };
+  if (score >= 2.0) return { name: 'C', color: 'tier-c', cssClass: 'bg-tier-c text-white' };
   return { name: 'D', color: 'tier-d', cssClass: 'bg-tier-d text-white' };
 };

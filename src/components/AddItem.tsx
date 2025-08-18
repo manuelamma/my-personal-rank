@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Slider } from '@/components/ui/slider';
+import { StarRating } from '@/components/ui/star-rating';
 import { Upload, X, Loader2, Camera } from 'lucide-react';
 import { Criteria, RankingItem } from '@/types/ranking';
 import { removeBackground, loadImage } from '@/utils/backgroundRemoval';
@@ -193,22 +193,12 @@ export const AddItem: React.FC<AddItemProps> = ({ criteria, onAdd, onCancel }) =
                 <div key={criterion.id} className="space-y-3 p-4 bg-accent/20 rounded-lg">
                   <div className="flex justify-between items-center">
                     <span className="font-medium">{criterion.name}</span>
-                    <span className="text-2xl font-bold text-primary">
-                      {ratings[criterion.id] || 0}/10
-                    </span>
                   </div>
-                  <Slider
-                    value={[ratings[criterion.id] || 0]}
-                    onValueChange={([value]) => updateRating(criterion.id, value)}
-                    max={10}
-                    min={0}
-                    step={0.5}
-                    className="w-full"
+                  <StarRating
+                    value={ratings[criterion.id] || 0}
+                    onChange={(value) => updateRating(criterion.id, value)}
+                    size="lg"
                   />
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>Poor</span>
-                    <span>Excellent</span>
-                  </div>
                 </div>
               ))}
             </div>

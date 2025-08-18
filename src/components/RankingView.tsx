@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Plus, List, Grid3X3, Star, Trophy, Medal, Award } from 'lucide-react';
+import { StarRating } from '@/components/ui/star-rating';
+import { ArrowLeft, Plus, List, Grid3X3, Trophy, Medal, Award } from 'lucide-react';
 import { Ranking, RankingItem, ViewMode } from '@/types/ranking';
 import { sortItemsByScore, getTierLevel } from '@/utils/scoring';
 import { AddItem } from './AddItem';
@@ -40,11 +41,11 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
 
   const groupItemsByTier = () => {
     const tiers = {
-      S: sortedItems.filter(item => item.totalScore >= 8.5),
-      A: sortedItems.filter(item => item.totalScore >= 7.0 && item.totalScore < 8.5),
-      B: sortedItems.filter(item => item.totalScore >= 5.5 && item.totalScore < 7.0),
-      C: sortedItems.filter(item => item.totalScore >= 4.0 && item.totalScore < 5.5),
-      D: sortedItems.filter(item => item.totalScore < 4.0)
+      S: sortedItems.filter(item => item.totalScore >= 4.25),
+      A: sortedItems.filter(item => item.totalScore >= 3.5 && item.totalScore < 4.25),
+      B: sortedItems.filter(item => item.totalScore >= 2.75 && item.totalScore < 3.5),
+      C: sortedItems.filter(item => item.totalScore >= 2.0 && item.totalScore < 2.75),
+      D: sortedItems.filter(item => item.totalScore < 2.0)
     };
     return Object.entries(tiers).filter(([_, items]) => items.length > 0);
   };
@@ -135,10 +136,13 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
                               <Badge className={tier.cssClass}>{tier.name}</Badge>
                             </div>
                             <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              <span className="flex items-center gap-1">
-                                <Star className="h-3 w-3 fill-current text-primary" />
-                                {item.totalScore.toFixed(1)}/10
-                              </span>
+                              <StarRating 
+                                value={item.totalScore} 
+                                onChange={() => {}} 
+                                readonly 
+                                size="sm" 
+                                showValue 
+                              />
                               <span>Added {item.createdAt.toLocaleDateString()}</span>
                             </div>
                           </div>
@@ -177,9 +181,12 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
                               )}
                               <div>
                                 <h4 className="font-medium">{item.name}</h4>
-                                <p className="text-sm text-muted-foreground">
-                                  {item.totalScore.toFixed(1)}/10
-                                </p>
+                                <StarRating 
+                                  value={item.totalScore} 
+                                  onChange={() => {}} 
+                                  readonly 
+                                  size="sm" 
+                                />
                               </div>
                             </div>
                           ))}

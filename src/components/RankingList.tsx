@@ -2,7 +2,8 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Star, Calendar } from 'lucide-react';
+import { StarRating } from '@/components/ui/star-rating';
+import { Plus, Calendar } from 'lucide-react';
 import { Ranking } from '@/types/ranking';
 
 interface RankingListProps {
@@ -122,10 +123,15 @@ export const RankingList: React.FC<RankingListProps> = ({ rankings, onSelectRank
                                   {itemIndex + 1}
                                 </span>
                                 <span className="truncate">{item.name}</span>
-                                <span className="flex items-center gap-1 text-xs text-muted-foreground ml-auto">
-                                  <Star className="h-3 w-3 fill-current text-primary" />
-                                  {item.totalScore.toFixed(1)}
-                                </span>
+                                <div className="ml-auto">
+                                  <StarRating 
+                                    value={item.totalScore} 
+                                    onChange={() => {}} 
+                                    readonly 
+                                    size="sm" 
+                                    showValue={false}
+                                  />
+                                </div>
                               </div>
                             ))}
                         </div>
