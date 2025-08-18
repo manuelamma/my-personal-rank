@@ -1,13 +1,91 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import React, { useState, useEffect } from 'react';
+import { Ranking, RankingItem, Criteria } from '@/types/ranking';
+import { saveRanking, loadRankings } from '@/utils/storage';
+import { calculateScore } from '@/utils/scoring';
+import { RankingList } from '@/components/RankingList';
+import { CreateRanking } from '@/components/CreateRanking';
+import { RankingView } from '@/components/RankingView';
+
+type AppState = 'list' | 'create' | 'view';
 
 const Index = () => {
+  const [appState, setAppState] = useState<AppState>('list');
+  const [rankings, setRankings] = useState<Ranking[]>([]);
+  const [currentRanking, setCurrentRanking] = useState<Ranking | null>(null);
+
+  useEffect(() => {
+    const loadedRankings = loadRankings();
+    setRankings(loadedRankings);
+  }, []);
+
+  const handleCreateRanking = (category: string, criteria: Criteria[]) => {
+    const newRanking: Ranking = {
+      id: `ranking-${Date.now()}`,
+      category,
+      criteria,
+      items: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    saveRanking(newRanking);
+    setRankings(prev => [...prev, newRanking]);
+    setCurrentRanking(newRanking);
+    setAppState('view');
+  };
+
+  const handleSelectRanking = (ranking: Ranking) => {
+    setCurrentRanking(ranking);
+    setAppState('view');
+  };
+
+  const handleUpdateRanking = (updatedRanking: Ranking) => {
+    // Recalculate scores for all items
+    const itemsWithUpdatedScores = updatedRanking.items.map(item => ({
+      ...item,
+      totalScore: calculateScore(item, updatedRanking.criteria)
+    }));
+
+    const finalRanking = {
+      ...updatedRanking,
+      items: itemsWithUpdatedScores
+    };
+
+    saveRanking(finalRanking);
+    setRankings(prev => prev.map(r => r.id === finalRanking.id ? finalRanking : r));
+    setCurrentRanking(finalRanking);
+  };
+
+  const handleBackToList = () => {
+    setCurrentRanking(null);
+    setAppState('list');
+  };
+
+  if (appState === 'create') {
+    return (
+      <CreateRanking
+        onCreate={handleCreateRanking}
+        onCancel={() => setAppState('list')}
+      />
+    );
+  }
+
+  if (appState === 'view' && currentRanking) {
+    return (
+      <RankingView
+        ranking={currentRanking}
+        onBack={handleBackToList}
+        onUpdateRanking={handleUpdateRanking}
+      />
+    );
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <RankingList
+      rankings={rankings}
+      onSelectRanking={handleSelectRanking}
+      onCreateNew={() => setAppState('create')}
+    />
   );
 };
 
