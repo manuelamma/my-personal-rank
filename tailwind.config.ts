@@ -120,21 +120,13 @@ export default {
 						transform: 'translateY(0)'
 					}
 				},
-				'glow': {
-					'0%, 100%': {
-						filter: 'brightness(1) blur(0px)'
-					},
-					'50%': {
-						filter: 'brightness(1.2) blur(1px)'
-					}
-				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.5s ease-out',
 				'slide-up': 'slide-up 0.3s ease-out',
-				'glow': 'glow 2s ease-in-out infinite'
+				
 			}
 		}
 	},
