@@ -60,7 +60,7 @@ export const CreateRanking: React.FC<CreateRankingProps> = ({ onCreate, onCancel
 
     setIsGenerating(true);
     try {
-      const response = await fetch('/api/functions/v1/generate-criteria', {
+      const response = await fetch('/functions/v1/generate-criteria', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
