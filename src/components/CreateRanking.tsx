@@ -4,8 +4,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Plus, X, Star } from 'lucide-react';
+import { Plus, X, Star, Sparkles, Check } from 'lucide-react';
 import { Criteria } from '@/types/ranking';
+import { useToast } from '@/components/ui/use-toast';
 
 interface CreateRankingProps {
   onCreate: (category: string, criteria: Criteria[]) => void;
@@ -25,6 +26,9 @@ export const CreateRanking: React.FC<CreateRankingProps> = ({ onCreate, onCancel
   const [category, setCategory] = useState('');
   const [criteria, setCriteria] = useState<Criteria[]>([]);
   const [newCriterion, setNewCriterion] = useState('');
+  const [aiSuggestions, setAiSuggestions] = useState<string[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const { toast } = useToast();
 
   const handleCategoryChange = (value: string) => {
     setCategory(value);
@@ -42,6 +46,57 @@ export const CreateRanking: React.FC<CreateRankingProps> = ({ onCreate, onCancel
         break;
       }
     }
+  };
+
+  const generateAiSuggestions = async () => {
+    if (!category.trim()) {
+      toast({
+        title: "Enter a category first",
+        description: "Please enter a category to get AI suggestions",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const response = await fetch('/api/functions/v1/generate-criteria', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ category: category.trim() }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate suggestions');
+      }
+
+      const data = await response.json();
+      setAiSuggestions(data.criteria);
+      toast({
+        title: "AI suggestions generated!",
+        description: "Review the suggestions and add the ones you like"
+      });
+    } catch (error) {
+      toast({
+        title: "Failed to generate suggestions",
+        description: "Please try again or add criteria manually",
+        variant: "destructive"
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const addAiSuggestion = (suggestion: string) => {
+    const criterion: Criteria = {
+      id: `criteria-${Date.now()}`,
+      name: suggestion,
+      weight: 3
+    };
+    setCriteria([...criteria, criterion]);
+    setAiSuggestions(aiSuggestions.filter(s => s !== suggestion));
   };
 
   const addCriterion = () => {
@@ -97,11 +152,43 @@ export const CreateRanking: React.FC<CreateRankingProps> = ({ onCreate, onCancel
             </div>
 
             <div className="space-y-4">
-              <Label>Evaluation Criteria</Label>
+              <div className="flex items-center justify-between">
+                <Label>Evaluation Criteria</Label>
+                <Button 
+                  type="button" 
+                  onClick={generateAiSuggestions} 
+                  variant="outline" 
+                  size="sm"
+                  disabled={isGenerating || !category.trim()}
+                  className="text-xs"
+                >
+                  <Sparkles className="h-3 w-3 mr-1" />
+                  {isGenerating ? 'Generating...' : 'AI Suggestions'}
+                </Button>
+              </div>
+
+              {aiSuggestions.length > 0 && (
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">AI Suggestions (click to add):</Label>
+                  <div className="flex flex-wrap gap-2">
+                    {aiSuggestions.map((suggestion, index) => (
+                      <Badge 
+                        key={index}
+                        variant="secondary" 
+                        className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
+                        onClick={() => addAiSuggestion(suggestion)}
+                      >
+                        <Plus className="h-3 w-3 mr-1" />
+                        {suggestion}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
               
               <div className="flex gap-2">
                 <Input
-                  placeholder="Add a new criterion..."
+                  placeholder="Add a custom criterion..."
                   value={newCriterion}
                   onChange={(e) => setNewCriterion(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCriterion())}
