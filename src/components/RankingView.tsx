@@ -3,10 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { StarRating } from '@/components/ui/star-rating';
-import { ArrowLeft, Plus, List, Grid3X3, Trophy, Medal, Award } from 'lucide-react';
+import { ArrowLeft, Plus, List, Grid3X3, Trophy, Medal, Award, Settings } from 'lucide-react';
 import { Ranking, RankingItem, ViewMode } from '@/types/ranking';
 import { sortItemsByScore, getTierLevel } from '@/utils/scoring';
 import { AddItem } from './AddItem';
+import { RankingSettings } from './RankingSettings';
 
 interface RankingViewProps {
   ranking: Ranking;
@@ -26,6 +27,7 @@ const getTrophyIcon = (position: number) => {
 export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpdateRanking }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [showAddItem, setShowAddItem] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   const sortedItems = sortItemsByScore(ranking.items);
 
@@ -37,6 +39,10 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
     };
     onUpdateRanking(updatedRanking);
     setShowAddItem(false);
+  };
+
+  const handleDeleteRanking = () => {
+    onBack(); // Navigate back when ranking is deleted
   };
 
   const groupItemsByTier = () => {
@@ -67,6 +73,13 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowSettings(true)}
+              >
+                <Settings className="h-4 w-4" />
+              </Button>
               <Button
                 variant={viewMode === 'list' ? 'default' : 'outline'}
                 size="sm"
@@ -207,6 +220,17 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
           criteria={ranking.criteria}
           onAdd={handleAddItem}
           onCancel={() => setShowAddItem(false)}
+        />
+      )}
+
+      {/* Settings Modal */}
+      {showSettings && (
+        <RankingSettings
+          ranking={ranking}
+          open={showSettings}
+          onClose={() => setShowSettings(false)}
+          onUpdate={onUpdateRanking}
+          onDelete={handleDeleteRanking}
         />
       )}
     </div>

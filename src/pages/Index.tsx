@@ -56,6 +56,13 @@ const Index = () => {
     setCurrentRanking(finalRanking);
   };
 
+  const handleDeleteRanking = (rankingId: string) => {
+    setRankings(prev => prev.filter(r => r.id !== rankingId));
+    // Remove from localStorage
+    const updatedRankings = rankings.filter(r => r.id !== rankingId);
+    localStorage.setItem('rankings', JSON.stringify(updatedRankings));
+  };
+
   const handleBackToList = () => {
     setCurrentRanking(null);
     setAppState('list');
@@ -85,6 +92,7 @@ const Index = () => {
       rankings={rankings}
       onSelectRanking={handleSelectRanking}
       onCreateNew={() => setAppState('create')}
+      onDeleteRanking={handleDeleteRanking}
     />
   );
 };

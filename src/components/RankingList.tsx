@@ -10,9 +10,10 @@ interface RankingListProps {
   rankings: Ranking[];
   onSelectRanking: (ranking: Ranking) => void;
   onCreateNew: () => void;
+  onDeleteRanking: (rankingId: string) => void;
 }
 
-export const RankingList: React.FC<RankingListProps> = ({ rankings, onSelectRanking, onCreateNew }) => {
+export const RankingList: React.FC<RankingListProps> = ({ rankings, onSelectRanking, onCreateNew, onDeleteRanking }) => {
   const sortedRankings = [...rankings].sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
 
   return (
