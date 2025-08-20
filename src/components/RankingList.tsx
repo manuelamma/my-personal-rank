@@ -19,18 +19,52 @@ export const RankingList: React.FC<RankingListProps> = ({ rankings, onSelectRank
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <div className="bg-gradient-primary text-primary-foreground">
-        <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-          <div className="space-y-6 animate-fade-in">
-            <h1 className="text-5xl font-bold tracking-tight">
+        <div className="max-w-4xl mx-auto px-4 py-12 text-center">
+          <div className="space-y-8 animate-fade-in">
+            <h1 className="text-7xl font-bold tracking-tight mb-8">
               RankIt
             </h1>
-            <p className="text-xl text-primary-foreground/90 max-w-2xl mx-auto">
-              Create personal rankings for anything. Rate what matters to you with custom criteria.
-            </p>
-            <Button variant="floating" size="xl" onClick={onCreateNew} className="shadow-elegant animate-glow">
-              <Plus className="h-5 w-5 mr-2" />
-              Create Your First Ranking
-            </Button>
+            
+            {/* Stats Section */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto">
+              <div className="bg-primary-foreground/10 backdrop-blur-sm rounded-xl p-4 hover-scale">
+                <div className="text-3xl font-bold">
+                  {rankings.length}
+                </div>
+                <div className="text-sm opacity-90">
+                  {rankings.length === 1 ? 'Ranking' : 'Rankings'} Created
+                </div>
+              </div>
+              
+              <div className="bg-primary-foreground/10 backdrop-blur-sm rounded-xl p-4 hover-scale">
+                <div className="text-3xl font-bold">
+                  {rankings.reduce((total, ranking) => total + ranking.items.length, 0)}
+                </div>
+                <div className="text-sm opacity-90">
+                  Items Ranked
+                </div>
+              </div>
+              
+              <div className="bg-primary-foreground/10 backdrop-blur-sm rounded-xl p-4 hover-scale">
+                <div className="text-3xl font-bold">
+                  {rankings.reduce((total, ranking) => 
+                    total + ranking.items.reduce((itemTotal, item) => 
+                      itemTotal + Object.keys(item.ratings).length, 0
+                    ), 0
+                  )}
+                </div>
+                <div className="text-sm opacity-90">
+                  Total Ratings
+                </div>
+              </div>
+            </div>
+
+            {rankings.length === 0 && (
+              <Button variant="floating" size="xl" onClick={onCreateNew} className="shadow-elegant animate-glow mt-6">
+                <Plus className="h-5 w-5 mr-2" />
+                Start Your First Ranking
+              </Button>
+            )}
           </div>
         </div>
       </div>
