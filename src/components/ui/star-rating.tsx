@@ -5,7 +5,7 @@ interface StarRatingProps {
   value: number;
   onChange: (value: number) => void;
   maxStars?: number;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   showValue?: boolean;
   readonly?: boolean;
 }
@@ -14,8 +14,8 @@ export const StarRating: React.FC<StarRatingProps> = ({
   value, 
   onChange, 
   maxStars = 5, 
-  size = 'md',
-  showValue = true,
+  size = 'lg',
+  showValue = false,
   readonly = false
 }) => {
   const [hoverValue, setHoverValue] = useState<number | null>(null);
@@ -25,7 +25,8 @@ export const StarRating: React.FC<StarRatingProps> = ({
   const sizeClasses = {
     sm: 'h-6 w-6',
     md: 'h-8 w-8',
-    lg: 'h-10 w-10'
+    lg: 'h-12 w-12',
+    xl: 'h-16 w-16'
   };
 
   const handleClick = (starIndex: number) => {
@@ -69,7 +70,7 @@ export const StarRating: React.FC<StarRatingProps> = ({
   };
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center justify-center gap-1">
       <div className="flex items-center justify-center">
         {Array.from({ length: maxStars }, (_, index) => {
           const fill = getStarFill(index);
