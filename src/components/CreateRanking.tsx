@@ -203,7 +203,6 @@ export const CreateRanking: React.FC<CreateRankingProps> = ({ onCreate, onCancel
                   <div key={criterion.id} className="flex items-center gap-3 p-3 bg-accent/30 rounded-lg">
                     <div className="flex-1">
                       <span className="font-medium">{criterion.name}</span>
-                      <span className="text-sm text-muted-foreground ml-2">(1-5 scale)</span>
                     </div>
                     
                     <div className="flex items-center justify-center gap-1">
