@@ -193,7 +193,12 @@ export const AddItem: React.FC<AddItemProps> = ({ criteria, onAdd, onCancel }) =
                 <div key={criterion.id} className="space-y-3 p-4 bg-accent/20 rounded-lg">
                   <div className="flex justify-center items-center">
                     <span className="font-medium">{criterion.name}</span>
-                    <span className="text-sm text-muted-foreground ml-2">(1-5 scale)</span>
+                    <span className="text-sm text-muted-foreground ml-2">
+                      {(ratings[criterion.id] || 0) % 1 === 0 
+                        ? `${Math.floor(ratings[criterion.id] || 0)}/5`
+                        : `${(ratings[criterion.id] || 0).toFixed(1)}/5`
+                      }
+                    </span>
                   </div>
                   <StarRating
                     value={ratings[criterion.id] || 0}
