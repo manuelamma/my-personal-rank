@@ -18,16 +18,38 @@ export const RankingList: React.FC<RankingListProps> = ({ rankings, onSelectRank
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <div className="bg-gradient-primary text-primary-foreground">
-        <div className="max-w-4xl mx-auto px-4 py-12 text-center">
+      <div className="bg-gradient-primary text-primary-foreground relative overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-10 w-20 h-20 rounded-full bg-primary-foreground animate-pulse"></div>
+          <div className="absolute top-40 right-20 w-16 h-16 rounded-full bg-primary-foreground animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute bottom-20 left-1/4 w-12 h-12 rounded-full bg-primary-foreground animate-pulse" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute bottom-40 right-1/3 w-24 h-24 rounded-full bg-primary-foreground animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+        </div>
+
+        <div className="max-w-4xl mx-auto px-4 py-12 text-center relative z-10">
           <div className="space-y-8 animate-fade-in">
-            <h1 className="text-7xl font-bold tracking-tight mb-8">
-              RankIt
-            </h1>
+            {/* Logo with emoji and tagline */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-center gap-4 mb-2">
+                <span className="text-6xl animate-bounce">🏆</span>
+                <h1 className="text-7xl font-bold tracking-tight">
+                  RankIt
+                </h1>
+                <span className="text-6xl animate-bounce" style={{ animationDelay: '0.5s' }}>⭐</span>
+              </div>
+              <p className="text-xl text-primary-foreground/90 font-medium">
+                Turn your opinions into organized rankings
+              </p>
+              <p className="text-lg text-primary-foreground/70">
+                Compare anything • Rate everything • Discover your preferences
+              </p>
+            </div>
             
-            {/* Stats Section */}
+            {/* Interactive Stats Section */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto">
-              <div className="bg-primary-foreground/10 backdrop-blur-sm rounded-xl p-4 hover-scale">
+              <div className="bg-primary-foreground/10 backdrop-blur-sm rounded-xl p-6 hover-scale cursor-pointer group">
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">📊</div>
                 <div className="text-3xl font-bold">
                   {rankings.length}
                 </div>
@@ -36,7 +58,8 @@ export const RankingList: React.FC<RankingListProps> = ({ rankings, onSelectRank
                 </div>
               </div>
               
-              <div className="bg-primary-foreground/10 backdrop-blur-sm rounded-xl p-4 hover-scale">
+              <div className="bg-primary-foreground/10 backdrop-blur-sm rounded-xl p-6 hover-scale cursor-pointer group">
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">🎯</div>
                 <div className="text-3xl font-bold">
                   {rankings.reduce((total, ranking) => total + ranking.items.length, 0)}
                 </div>
@@ -45,7 +68,8 @@ export const RankingList: React.FC<RankingListProps> = ({ rankings, onSelectRank
                 </div>
               </div>
               
-              <div className="bg-primary-foreground/10 backdrop-blur-sm rounded-xl p-4 hover-scale">
+              <div className="bg-primary-foreground/10 backdrop-blur-sm rounded-xl p-6 hover-scale cursor-pointer group">
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">⚡</div>
                 <div className="text-3xl font-bold">
                   {rankings.reduce((total, ranking) => 
                     total + ranking.items.reduce((itemTotal, item) => 
@@ -59,11 +83,27 @@ export const RankingList: React.FC<RankingListProps> = ({ rankings, onSelectRank
               </div>
             </div>
 
-            {rankings.length === 0 && (
-              <Button variant="floating" size="xl" onClick={onCreateNew} className="shadow-elegant animate-glow mt-6">
-                <Plus className="h-5 w-5 mr-2" />
-                Start Your First Ranking
-              </Button>
+            {/* Call to Action */}
+            {rankings.length === 0 ? (
+              <div className="space-y-4">
+                <p className="text-lg text-primary-foreground/80 font-medium">
+                  Ready to organize your world? 🌟
+                </p>
+                <Button variant="floating" size="xl" onClick={onCreateNew} className="shadow-elegant animate-glow">
+                  <Plus className="h-5 w-5 mr-2" />
+                  Start Your First Ranking
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <p className="text-lg text-primary-foreground/80 font-medium">
+                  Keep the momentum going! 🚀
+                </p>
+                <Button variant="floating" size="lg" onClick={onCreateNew} className="shadow-elegant">
+                  <Plus className="h-5 w-5 mr-2" />
+                  Create Another Ranking
+                </Button>
+              </div>
             )}
           </div>
         </div>
