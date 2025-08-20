@@ -191,8 +191,9 @@ export const AddItem: React.FC<AddItemProps> = ({ criteria, onAdd, onCancel }) =
               <Label>Rate this item</Label>
               {criteria.map((criterion) => (
                 <div key={criterion.id} className="space-y-3 p-4 bg-accent/20 rounded-lg">
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-center items-center">
                     <span className="font-medium">{criterion.name}</span>
+                    <span className="text-sm text-muted-foreground ml-2">(1-5 scale)</span>
                   </div>
                   <StarRating
                     value={ratings[criterion.id] || 0}
