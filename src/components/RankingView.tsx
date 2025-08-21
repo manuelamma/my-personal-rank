@@ -47,11 +47,12 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
 
   const groupItemsByTier = () => {
     const tiers = {
-      S: sortedItems.filter(item => item.totalScore >= 4.25),
-      A: sortedItems.filter(item => item.totalScore >= 3.5 && item.totalScore < 4.25),
-      B: sortedItems.filter(item => item.totalScore >= 2.75 && item.totalScore < 3.5),
-      C: sortedItems.filter(item => item.totalScore >= 2.0 && item.totalScore < 2.75),
-      D: sortedItems.filter(item => item.totalScore < 2.0)
+      S: sortedItems.filter(item => item.totalScore >= 4.5),
+      A: sortedItems.filter(item => item.totalScore >= 4.0 && item.totalScore < 4.5),
+      B: sortedItems.filter(item => item.totalScore >= 3.5 && item.totalScore < 4.0),
+      C: sortedItems.filter(item => item.totalScore >= 2.75 && item.totalScore < 3.5),
+      D: sortedItems.filter(item => item.totalScore >= 2.0 && item.totalScore < 2.75),
+      F: sortedItems.filter(item => item.totalScore < 2.0)
     };
     return Object.entries(tiers).filter(([_, items]) => items.length > 0);
   };
