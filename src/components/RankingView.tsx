@@ -62,18 +62,18 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
       {/* Header */}
       <div className="bg-gradient-card border-b shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="flex items-center gap-4">
-              <Button variant="ghost" onClick={onBack}>
+              <Button variant="ghost" onClick={onBack} size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back
               </Button>
               <div>
-                <h1 className="text-2xl font-bold">{ranking.category}</h1>
-                <p className="text-muted-foreground">{ranking.items.length} items ranked</p>
+                <h1 className="text-lg md:text-2xl font-bold">{ranking.category}</h1>
+                <p className="text-sm text-muted-foreground">{ranking.items.length} items ranked</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <Button
                 variant="outline"
                 size="sm"
@@ -95,9 +95,15 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
               >
                 <Grid3X3 className="h-4 w-4" />
               </Button>
-              <Button variant="gradient" onClick={() => setShowAddItem(true)}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Item
+              <Button 
+                variant="gradient" 
+                size="sm"
+                onClick={() => setShowAddItem(true)}
+                className="flex-shrink-0"
+              >
+                <Plus className="h-4 w-4 mr-1 md:mr-2" />
+                <span className="hidden sm:inline">Add Item</span>
+                <span className="sm:hidden">Add</span>
               </Button>
             </div>
           </div>
@@ -127,42 +133,42 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
                 {sortedItems.map((item, index) => {
                   const tier = getTierLevel(item.totalScore);
                   return (
-                    <Card key={item.id} className="overflow-hidden hover:shadow-elegant transition-all duration-200 animate-fade-in">
-                      <CardContent className="p-4">
-                        <div className="flex items-center gap-4">
-                          <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-accent">
-                            {getTrophyIcon(index + 1)}
-                          </div>
-                          
-                          {item.image && (
-                            <div className="w-16 h-16 rounded-lg overflow-hidden shadow-card">
-                              <img
-                                src={item.image}
-                                alt={item.name}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                          )}
-                          
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h3 className="font-semibold text-lg">{item.name}</h3>
-                              <Badge className={tier.cssClass}>{tier.name}</Badge>
-                            </div>
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              <StarRating 
-                                value={item.totalScore} 
-                                onChange={() => {}} 
-                                readonly 
-                                size="sm" 
-                                showValue 
-                              />
-                              <span>Added {item.createdAt.toLocaleDateString()}</span>
-                            </div>
-                          </div>
+                <Card key={item.id} className="overflow-hidden hover:shadow-elegant transition-all duration-200 animate-fade-in">
+                  <CardContent className="p-3 md:p-4">
+                    <div className="flex items-center gap-3 md:gap-4">
+                      <div className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-lg bg-accent flex-shrink-0">
+                        {getTrophyIcon(index + 1)}
+                      </div>
+                      
+                      {item.image && (
+                        <div className="w-12 h-12 md:w-16 md:h-16 rounded-lg overflow-hidden shadow-card flex-shrink-0">
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="w-full h-full object-cover"
+                          />
                         </div>
-                      </CardContent>
-                    </Card>
+                      )}
+                      
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
+                          <h3 className="font-semibold text-base md:text-lg truncate">{item.name}</h3>
+                          <Badge className={`${tier.cssClass} flex-shrink-0`}>{tier.name}</Badge>
+                        </div>
+                        <div className="flex items-center gap-2 md:gap-4 text-xs md:text-sm text-muted-foreground flex-wrap">
+                          <StarRating 
+                            value={item.totalScore} 
+                            onChange={() => {}} 
+                            readonly 
+                            size="sm" 
+                            showValue 
+                          />
+                          <span className="truncate">Added {item.createdAt.toLocaleDateString()}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
                   );
                 })}
               </div>
@@ -181,11 +187,11 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="p-4">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
                           {items.map((item) => (
-                            <div key={item.id} className="text-center space-y-2 p-3 rounded-lg bg-accent/20 hover:bg-accent/30 transition-colors">
+                            <div key={item.id} className="text-center space-y-2 p-2 md:p-3 rounded-lg bg-accent/20 hover:bg-accent/30 transition-colors">
                               {item.image && (
-                                <div className="w-20 h-20 mx-auto rounded-lg overflow-hidden shadow-card">
+                                <div className="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-lg overflow-hidden shadow-card">
                                   <img
                                     src={item.image}
                                     alt={item.name}
@@ -194,7 +200,7 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
                                 </div>
                               )}
                               <div>
-                                <h4 className="font-medium">{item.name}</h4>
+                                <h4 className="font-medium text-sm md:text-base truncate" title={item.name}>{item.name}</h4>
                                 <StarRating 
                                   value={item.totalScore} 
                                   onChange={() => {}} 
