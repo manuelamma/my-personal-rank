@@ -49,7 +49,7 @@ All colors MUST be HSL.
     --tier-b: 210 80% 60%;
     --tier-c: 50 100% 60%;
     --tier-d: 0 70% 65%;
-    --tier-f: 0 85% 45%;
+    --tier-f: 0 85% 25%;
 
     --radius: 0.5rem;
 
@@ -112,7 +112,7 @@ All colors MUST be HSL.
     --tier-b: 210 80% 70%;
     --tier-c: 50 100% 70%;
     --tier-d: 0 70% 75%;
-    --tier-f: 0 85% 55%;
+    --tier-f: 0 85% 30%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
