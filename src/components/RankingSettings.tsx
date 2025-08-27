@@ -69,23 +69,23 @@ export const RankingSettings: React.FC<RankingSettingsProps> = ({
   return (
     <>
       <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
+            <DialogTitle className="flex items-center gap-2 text-lg">
               <Settings className="h-5 w-5" />
               Ranking Settings
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="text-sm">
               Manage your ranking: edit details, modify criteria, bulk manage items, or delete entirely.
             </DialogDescription>
           </DialogHeader>
 
           <Tabs defaultValue="general" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="general">General</TabsTrigger>
-              <TabsTrigger value="criteria">Criteria</TabsTrigger>
-              <TabsTrigger value="items">Items</TabsTrigger>
-              <TabsTrigger value="danger">Danger Zone</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
+              <TabsTrigger value="general" className="text-xs md:text-sm">General</TabsTrigger>
+              <TabsTrigger value="criteria" className="text-xs md:text-sm">Criteria</TabsTrigger>
+              <TabsTrigger value="items" className="text-xs md:text-sm">Items</TabsTrigger>
+              <TabsTrigger value="danger" className="text-xs md:text-sm">Danger</TabsTrigger>
             </TabsList>
 
             <TabsContent value="general" className="space-y-4">

@@ -79,7 +79,7 @@ export const BulkItemActions: React.FC<BulkItemActionsProps> = ({ items, criteri
   return (
     <>
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-lg font-medium">Bulk Item Management</h3>
             <p className="text-sm text-muted-foreground">
@@ -90,7 +90,7 @@ export const BulkItemActions: React.FC<BulkItemActionsProps> = ({ items, criteri
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="px-3 py-1 border rounded-md text-sm"
+              className="px-3 py-2 border border-input rounded-md text-sm bg-background min-w-0 flex-1 sm:flex-initial sm:min-w-[200px]"
             >
               <option value="score-desc">Score (High to Low)</option>
               <option value="score-asc">Score (Low to High)</option>
@@ -103,7 +103,7 @@ export const BulkItemActions: React.FC<BulkItemActionsProps> = ({ items, criteri
         </div>
 
         {items.length > 0 && (
-          <div className="flex items-center justify-between p-3 bg-accent/30 rounded-lg">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between p-3 bg-accent/30 rounded-lg">
             <div className="flex items-center gap-3">
               <Button
                 variant="outline"
@@ -116,10 +116,15 @@ export const BulkItemActions: React.FC<BulkItemActionsProps> = ({ items, criteri
                 ) : (
                   <Square className="h-4 w-4" />
                 )}
-                {selectedItems.size === items.length ? 'Deselect All' : 'Select All'}
+                <span className="hidden sm:inline">
+                  {selectedItems.size === items.length ? 'Deselect All' : 'Select All'}
+                </span>
+                <span className="sm:hidden">
+                  {selectedItems.size === items.length ? 'Deselect' : 'Select'} All
+                </span>
               </Button>
               <span className="text-sm text-muted-foreground">
-                {selectedItems.size} of {items.length} items selected
+                {selectedItems.size} of {items.length} selected
               </span>
             </div>
             
@@ -128,9 +133,11 @@ export const BulkItemActions: React.FC<BulkItemActionsProps> = ({ items, criteri
                 variant="destructive"
                 size="sm"
                 onClick={() => setShowDeleteDialog(true)}
+                className="w-full sm:w-auto"
               >
                 <Trash2 className="h-4 w-4 mr-2" />
-                Delete Selected ({selectedItems.size})
+                <span className="hidden sm:inline">Delete Selected ({selectedItems.size})</span>
+                <span className="sm:hidden">Delete ({selectedItems.size})</span>
               </Button>
             )}
           </div>
@@ -149,44 +156,48 @@ export const BulkItemActions: React.FC<BulkItemActionsProps> = ({ items, criteri
                 }`}
                 onClick={() => toggleItem(item.id)}
               >
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-4">
+                <CardContent className="p-3 md:p-4">
+                  <div className="flex items-start gap-3 md:gap-4">
                     <Checkbox 
                       checked={isSelected}
                       onChange={() => toggleItem(item.id)}
-                      className="pointer-events-none"
+                      className="pointer-events-none mt-1 flex-shrink-0"
                     />
                     
                     {item.image && (
                       <img 
                         src={item.image} 
                         alt={item.name}
-                        className="w-12 h-12 object-cover rounded-lg"
+                        className="w-10 h-10 md:w-12 md:h-12 object-cover rounded-lg flex-shrink-0"
                       />
                     )}
                     
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h4 className="font-medium truncate">{item.name}</h4>
-                        <Badge className={tier.cssClass}>{tier.name}</Badge>
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 mb-1 flex-wrap">
+                            <h4 className="font-medium text-sm md:text-base truncate">{item.name}</h4>
+                            <Badge className={`${tier.cssClass} flex-shrink-0`}>{tier.name}</Badge>
+                          </div>
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                            <StarRating 
+                              value={item.totalScore} 
+                              onChange={() => {}} 
+                              readonly 
+                              size="sm" 
+                              showValue 
+                            />
+                            <span className="text-xs text-muted-foreground">
+                              {Object.keys(item.ratings).length} of {criteria.length} criteria rated
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div className="text-right text-xs md:text-sm text-muted-foreground flex-shrink-0">
+                          <div>#{index + 1}</div>
+                          <div className="whitespace-nowrap">{new Date(item.createdAt).toLocaleDateString()}</div>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-4">
-                        <StarRating 
-                          value={item.totalScore} 
-                          onChange={() => {}} 
-                          readonly 
-                          size="sm" 
-                          showValue 
-                        />
-                        <span className="text-xs text-muted-foreground">
-                          {Object.keys(item.ratings).length} of {criteria.length} criteria rated
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div className="text-right text-sm text-muted-foreground">
-                      <div>#{index + 1}</div>
-                      <div>{new Date(item.createdAt).toLocaleDateString()}</div>
                     </div>
                   </div>
                 </CardContent>
