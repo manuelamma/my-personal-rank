@@ -58,7 +58,8 @@ export default {
 					a: 'hsl(var(--tier-a))',
 					b: 'hsl(var(--tier-b))',
 					c: 'hsl(var(--tier-c))',
-					d: 'hsl(var(--tier-d))'
+					d: 'hsl(var(--tier-d))',
+					f: 'hsl(var(--tier-f))'
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
