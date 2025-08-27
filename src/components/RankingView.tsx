@@ -133,7 +133,7 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
                 {sortedItems.map((item, index) => {
                   const tier = getTierLevel(item.totalScore);
                   return (
-                <Card key={item.id} className="overflow-hidden hover:shadow-elegant transition-all duration-200 animate-fade-in">
+                <Card key={item.id} className="overflow-hidden transition-all duration-200 animate-fade-in">
                   <CardContent className="p-3 md:p-4">
                     <div className="flex items-center gap-3 md:gap-4">
                       <div className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-lg bg-accent flex-shrink-0">
@@ -189,7 +189,7 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
                       <CardContent className="p-4">
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
                           {items.map((item) => (
-                            <div key={item.id} className="text-center space-y-2 p-2 md:p-3 rounded-lg bg-accent/20 hover:bg-accent/30 transition-colors">
+                            <div key={item.id} className="text-center space-y-2 p-2 md:p-3 rounded-lg bg-accent/20 transition-colors">
                               {item.image && (
                                 <div className="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-lg overflow-hidden shadow-card">
                                   <img
