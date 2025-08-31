@@ -6,6 +6,7 @@ import { StarRating } from '@/components/ui/star-rating';
 import { ArrowLeft, Plus, List, Grid3X3, Trophy, Medal, Award, Settings } from 'lucide-react';
 import { Ranking, RankingItem, ViewMode } from '@/types/ranking';
 import { sortItemsByScore, getTierLevel } from '@/utils/scoring';
+import { deleteRanking } from '@/utils/storage';
 import { AddItem } from './AddItem';
 import { RankingSettings } from './RankingSettings';
 
@@ -13,6 +14,7 @@ interface RankingViewProps {
   ranking: Ranking;
   onBack: () => void;
   onUpdateRanking: (ranking: Ranking) => void;
+  onDeleteRanking?: (rankingId: string) => void;
 }
 
 const getTrophyIcon = (position: number) => {
@@ -24,7 +26,7 @@ const getTrophyIcon = (position: number) => {
   }
 };
 
-export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpdateRanking }) => {
+export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpdateRanking, onDeleteRanking }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [showAddItem, setShowAddItem] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -42,7 +44,14 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
   };
 
   const handleDeleteRanking = () => {
-    onBack(); // Navigate back when ranking is deleted
+    // Delete from storage
+    deleteRanking(ranking.id);
+    // Update parent component state if callback provided
+    if (onDeleteRanking) {
+      onDeleteRanking(ranking.id);
+    }
+    // Navigate back
+    onBack();
   };
 
   const groupItemsByTier = () => {

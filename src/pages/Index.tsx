@@ -58,9 +58,9 @@ const Index = () => {
 
   const handleDeleteRanking = (rankingId: string) => {
     setRankings(prev => prev.filter(r => r.id !== rankingId));
-    // Remove from localStorage
-    const updatedRankings = rankings.filter(r => r.id !== rankingId);
-    localStorage.setItem('rankings', JSON.stringify(updatedRankings));
+    // Reload rankings from storage to ensure consistency
+    const updatedRankings = loadRankings().filter(r => r.id !== rankingId);
+    setRankings(updatedRankings);
   };
 
   const handleBackToList = () => {
@@ -83,6 +83,7 @@ const Index = () => {
         ranking={currentRanking}
         onBack={handleBackToList}
         onUpdateRanking={handleUpdateRanking}
+        onDeleteRanking={handleDeleteRanking}
       />
     );
   }
