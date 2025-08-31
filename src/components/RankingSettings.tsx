@@ -80,131 +80,131 @@ export const RankingSettings: React.FC<RankingSettingsProps> = ({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="flex-1 overflow-y-auto">
-            <Tabs defaultValue="general" className="w-full">
-              <TabsList className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-1 p-1 sticky top-0 bg-background z-10 mb-4">
-                <TabsTrigger value="general" className="w-full text-xs sm:text-sm">General</TabsTrigger>
-                <TabsTrigger value="criteria" className="w-full text-xs sm:text-sm">Criteria</TabsTrigger>
-                <TabsTrigger value="items" className="w-full text-xs sm:text-sm">Items</TabsTrigger>
-                <TabsTrigger value="danger" className="w-full text-xs sm:text-sm">Danger</TabsTrigger>
-              </TabsList>
+          <Tabs defaultValue="general" className="w-full flex flex-col flex-1">
+            <TabsList className="flex w-full justify-start overflow-x-auto p-1 mb-4 flex-shrink-0">
+              <TabsTrigger value="general" className="whitespace-nowrap px-4 py-2 text-sm">General</TabsTrigger>
+              <TabsTrigger value="criteria" className="whitespace-nowrap px-4 py-2 text-sm">Criteria</TabsTrigger>
+              <TabsTrigger value="items" className="whitespace-nowrap px-4 py-2 text-sm">Items</TabsTrigger>
+              <TabsTrigger value="danger" className="whitespace-nowrap px-4 py-2 text-sm">Danger</TabsTrigger>
+            </TabsList>
 
-            <TabsContent value="general" className="space-y-4">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-medium">Basic Information</h3>
-                  {!isEditing ? (
-                    <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
-                      <Edit3 className="h-4 w-4 mr-2" />
-                      Edit
+            <div className="flex-1 overflow-y-auto px-1">
+              <TabsContent value="general" className="space-y-4 mt-0">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-medium">Basic Information</h3>
+                    {!isEditing ? (
+                      <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
+                        <Edit3 className="h-4 w-4 mr-2" />
+                        Edit
+                      </Button>
+                    ) : (
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" onClick={() => {
+                          setEditedRanking(ranking);
+                          setIsEditing(false);
+                        }}>
+                          <X className="h-4 w-4 mr-2" />
+                          Cancel
+                        </Button>
+                        <Button size="sm" onClick={handleSave}>
+                          <Save className="h-4 w-4 mr-2" />
+                          Save
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="grid gap-4">
+                    <div>
+                      <Label htmlFor="category">Category</Label>
+                      <Input
+                        id="category"
+                        value={editedRanking.category}
+                        onChange={(e) => setEditedRanking(prev => ({ ...prev, category: e.target.value }))}
+                        disabled={!isEditing}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="description">Description</Label>
+                      <Textarea
+                        id="description"
+                        value={editedRanking.description || ''}
+                        onChange={(e) => setEditedRanking(prev => ({ ...prev, description: e.target.value }))}
+                        disabled={!isEditing}
+                        rows={3}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="bg-accent/30 p-4 rounded-lg">
+                    <h4 className="font-medium mb-2">Statistics</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                      <div>
+                        <div className="font-semibold">{ranking.items.length}</div>
+                        <div className="text-muted-foreground">Items</div>
+                      </div>
+                      <div>
+                        <div className="font-semibold">{ranking.criteria.length}</div>
+                        <div className="text-muted-foreground">Criteria</div>
+                      </div>
+                      <div>
+                        <div className="font-semibold">
+                          {ranking.items.reduce((total, item) => 
+                            total + Object.keys(item.ratings).length, 0
+                          )}
+                        </div>
+                        <div className="text-muted-foreground">Total Ratings</div>
+                      </div>
+                      <div>
+                        <div className="font-semibold">
+                          {new Date(ranking.createdAt).toLocaleDateString()}
+                        </div>
+                        <div className="text-muted-foreground">Created</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="criteria" className="mt-0">
+                <CriteriaEditor
+                  criteria={editedRanking.criteria}
+                  onUpdate={handleCriteriaUpdate}
+                />
+              </TabsContent>
+
+              <TabsContent value="items" className="mt-0">
+                <BulkItemActions
+                  items={editedRanking.items}
+                  criteria={editedRanking.criteria}
+                  onUpdate={handleItemsUpdate}
+                />
+              </TabsContent>
+
+              <TabsContent value="danger" className="space-y-4 mt-0">
+                <div className="border border-destructive/20 rounded-lg p-4 space-y-4">
+                  <div>
+                    <h3 className="text-lg font-medium text-destructive">Danger Zone</h3>
+                    <p className="text-sm text-muted-foreground">
+                      These actions cannot be undone. Please proceed with caution.
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <Button
+                      variant="destructive"
+                      onClick={() => setShowDeleteDialog(true)}
+                      className="w-full justify-start"
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Delete Entire Ranking
                     </Button>
-                  ) : (
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => {
-                        setEditedRanking(ranking);
-                        setIsEditing(false);
-                      }}>
-                        <X className="h-4 w-4 mr-2" />
-                        Cancel
-                      </Button>
-                      <Button size="sm" onClick={handleSave}>
-                        <Save className="h-4 w-4 mr-2" />
-                        Save
-                      </Button>
-                    </div>
-                  )}
-                </div>
-
-                <div className="grid gap-4">
-                  <div>
-                    <Label htmlFor="category">Category</Label>
-                    <Input
-                      id="category"
-                      value={editedRanking.category}
-                      onChange={(e) => setEditedRanking(prev => ({ ...prev, category: e.target.value }))}
-                      disabled={!isEditing}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea
-                      id="description"
-                      value={editedRanking.description || ''}
-                      onChange={(e) => setEditedRanking(prev => ({ ...prev, description: e.target.value }))}
-                      disabled={!isEditing}
-                      rows={3}
-                    />
                   </div>
                 </div>
-
-                <div className="bg-accent/30 p-4 rounded-lg">
-                  <h4 className="font-medium mb-2">Statistics</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                    <div>
-                      <div className="font-semibold">{ranking.items.length}</div>
-                      <div className="text-muted-foreground">Items</div>
-                    </div>
-                    <div>
-                      <div className="font-semibold">{ranking.criteria.length}</div>
-                      <div className="text-muted-foreground">Criteria</div>
-                    </div>
-                    <div>
-                      <div className="font-semibold">
-                        {ranking.items.reduce((total, item) => 
-                          total + Object.keys(item.ratings).length, 0
-                        )}
-                      </div>
-                      <div className="text-muted-foreground">Total Ratings</div>
-                    </div>
-                    <div>
-                      <div className="font-semibold">
-                        {new Date(ranking.createdAt).toLocaleDateString()}
-                      </div>
-                      <div className="text-muted-foreground">Created</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="criteria">
-              <CriteriaEditor
-                criteria={editedRanking.criteria}
-                onUpdate={handleCriteriaUpdate}
-              />
-            </TabsContent>
-
-            <TabsContent value="items">
-              <BulkItemActions
-                items={editedRanking.items}
-                criteria={editedRanking.criteria}
-                onUpdate={handleItemsUpdate}
-              />
-            </TabsContent>
-
-            <TabsContent value="danger" className="space-y-4">
-              <div className="border border-destructive/20 rounded-lg p-4 space-y-4">
-                <div>
-                  <h3 className="text-lg font-medium text-destructive">Danger Zone</h3>
-                  <p className="text-sm text-muted-foreground">
-                    These actions cannot be undone. Please proceed with caution.
-                  </p>
-                </div>
-                
-                <div className="space-y-3">
-                  <Button
-                    variant="destructive"
-                    onClick={() => setShowDeleteDialog(true)}
-                    className="w-full justify-start"
-                  >
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    Delete Entire Ranking
-                  </Button>
-                </div>
-              </div>
-            </TabsContent>
-            </Tabs>
-          </div>
+              </TabsContent>
+            </div>
+          </Tabs>
 
           <DialogFooter className="flex-shrink-0">
             <Button variant="outline" onClick={onClose}>
