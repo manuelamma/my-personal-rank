@@ -69,8 +69,8 @@ export const RankingSettings: React.FC<RankingSettingsProps> = ({
   return (
     <>
       <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="max-w-4xl w-[95vw] h-[95vh] max-h-[95vh] overflow-y-auto sm:max-w-4xl sm:w-[90vw] sm:h-auto sm:max-h-[90vh]">
-          <DialogHeader>
+        <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] sm:max-w-4xl sm:w-[90vw] flex flex-col">
+          <DialogHeader className="flex-shrink-0">
             <DialogTitle className="flex items-center gap-2 text-lg">
               <Settings className="h-5 w-5" />
               Ranking Settings
@@ -80,13 +80,14 @@ export const RankingSettings: React.FC<RankingSettingsProps> = ({
             </DialogDescription>
           </DialogHeader>
 
-          <Tabs defaultValue="general" className="w-full">
-            <TabsList className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-1 p-1">
-              <TabsTrigger value="general" className="w-full text-xs sm:text-sm">General</TabsTrigger>
-              <TabsTrigger value="criteria" className="w-full text-xs sm:text-sm">Criteria</TabsTrigger>
-              <TabsTrigger value="items" className="w-full text-xs sm:text-sm">Items</TabsTrigger>
-              <TabsTrigger value="danger" className="w-full text-xs sm:text-sm">Danger</TabsTrigger>
-            </TabsList>
+          <div className="flex-1 overflow-y-auto">
+            <Tabs defaultValue="general" className="w-full">
+              <TabsList className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-1 p-1 sticky top-0 bg-background z-10 mb-4">
+                <TabsTrigger value="general" className="w-full text-xs sm:text-sm">General</TabsTrigger>
+                <TabsTrigger value="criteria" className="w-full text-xs sm:text-sm">Criteria</TabsTrigger>
+                <TabsTrigger value="items" className="w-full text-xs sm:text-sm">Items</TabsTrigger>
+                <TabsTrigger value="danger" className="w-full text-xs sm:text-sm">Danger</TabsTrigger>
+              </TabsList>
 
             <TabsContent value="general" className="space-y-4">
               <div className="space-y-4">
@@ -202,9 +203,10 @@ export const RankingSettings: React.FC<RankingSettingsProps> = ({
                 </div>
               </div>
             </TabsContent>
-          </Tabs>
+            </Tabs>
+          </div>
 
-          <DialogFooter>
+          <DialogFooter className="flex-shrink-0">
             <Button variant="outline" onClick={onClose}>
               Close
             </Button>
