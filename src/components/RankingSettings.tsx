@@ -81,7 +81,7 @@ export const RankingSettings: React.FC<RankingSettingsProps> = ({
           </DialogHeader>
 
           <Tabs defaultValue="general" className="w-full flex flex-col flex-1">
-            <TabsList className="flex w-full justify-start overflow-x-auto p-1 mb-4 flex-shrink-0">
+            <TabsList className="grid w-full grid-cols-4 p-1 mb-4 flex-shrink-0">
               <TabsTrigger value="general" className="whitespace-nowrap px-4 py-2 text-sm">General</TabsTrigger>
               <TabsTrigger value="criteria" className="whitespace-nowrap px-4 py-2 text-sm">Criteria</TabsTrigger>
               <TabsTrigger value="items" className="whitespace-nowrap px-4 py-2 text-sm">Items</TabsTrigger>
