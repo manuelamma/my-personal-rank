@@ -32,12 +32,12 @@ export const RankingList: React.FC<RankingListProps> = ({ rankings, onSelectRank
           <div className="space-y-8 animate-fade-in">
             {/* Logo with emoji and tagline */}
             <div className="space-y-4">
-              <div className="flex items-center justify-center gap-4 mb-2">
-                <span className="text-6xl animate-bounce">🏆</span>
-                <h1 className="text-7xl font-bold tracking-tight">
+              <div className="flex items-center justify-center gap-2 sm:gap-4 mb-2 flex-wrap">
+                <span className="text-4xl sm:text-5xl md:text-6xl animate-float">🏆</span>
+                <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-center">
                   RankIt
                 </h1>
-                <span className="text-6xl animate-bounce" style={{ animationDelay: '0.5s' }}>⭐</span>
+                <span className="text-4xl sm:text-5xl md:text-6xl animate-float" style={{ animationDelay: '1.5s' }}>⭐</span>
               </div>
               <p className="text-xl text-primary-foreground/90 font-medium">
                 Turn your opinions into organized rankings
