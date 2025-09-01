@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { StarRating } from '@/components/ui/star-rating';
 import { Plus, Calendar } from 'lucide-react';
 import { Ranking } from '@/types/ranking';
+import { useToast } from '@/hooks/use-toast';
 
 interface RankingListProps {
   rankings: Ranking[];
@@ -15,6 +16,27 @@ interface RankingListProps {
 
 export const RankingList: React.FC<RankingListProps> = ({ rankings, onSelectRanking, onCreateNew, onDeleteRanking }) => {
   const sortedRankings = [...rankings].sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+  const { toast } = useToast();
+
+  // Random ranking challenges for inspiration
+  const surpriseChallenges = [
+    "Best Pizza Toppings", "Most Overrated Movies", "Dream Vacation Destinations", 
+    "Best Childhood Snacks", "Most Useful Superpowers", "Best Study Spots",
+    "Most Annoying Sound Effects", "Best Ice Cream Flavors", "Most Comfortable Shoes",
+    "Best Rainy Day Activities", "Most Inspiring Quotes", "Best Coffee Shop Vibes",
+    "Most Relaxing Colors", "Best Weekend Plans", "Most Creative Hobbies",
+    "Best Netflix Series", "Most Addictive Games", "Best Workout Songs",
+    "Most Useful Apps", "Best Comfort Foods", "Most Beautiful Sunsets"
+  ];
+
+  const handleSurpriseMe = () => {
+    const randomChallenge = surpriseChallenges[Math.floor(Math.random() * surpriseChallenges.length)];
+    toast({
+      title: "🎲 Random Ranking Challenge!",
+      description: `How about ranking: "${randomChallenge}"? Click Create to get started!`,
+      duration: 5000,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -100,10 +122,15 @@ export const RankingList: React.FC<RankingListProps> = ({ rankings, onSelectRank
                 <p className="text-lg text-primary-foreground/80 font-medium">
                   Keep the momentum going! 🚀
                 </p>
-                <Button variant="floating" size="lg" onClick={onCreateNew} className="shadow-elegant">
-                  <Plus className="h-5 w-5 mr-2" />
-                  Create Another Ranking
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Button variant="floating" size="lg" onClick={onCreateNew} className="shadow-elegant">
+                    <Plus className="h-5 w-5 mr-2" />
+                    Create Another Ranking
+                  </Button>
+                  <Button variant="outline" size="lg" onClick={handleSurpriseMe} className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/20">
+                    🎲 Surprise Me
+                  </Button>
+                </div>
               </div>
             )}
           </div>
