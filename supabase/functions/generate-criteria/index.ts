@@ -17,19 +17,19 @@ serve(async (req) => {
       throw new Error('Category is required')
     }
 
-    const openaiApiKey = Deno.env.get('OPENAI_API_KEY')
-    if (!openaiApiKey) {
-      throw new Error('OpenAI API key not configured')
+    const perplexityApiKey = Deno.env.get('PERPLEXITY_API_KEY')
+    if (!perplexityApiKey) {
+      throw new Error('Perplexity API key not configured')
     }
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://api.perplexity.ai/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openaiApiKey}`,
+        'Authorization': `Bearer ${perplexityApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
+        model: 'llama-3.1-sonar-small-128k-online',
         messages: [
           {
             role: 'system',
@@ -40,13 +40,17 @@ serve(async (req) => {
             content: `Generate 5 evaluation criteria for ranking: ${category}`
           }
         ],
-        temperature: 0.7,
+        temperature: 0.2,
         max_tokens: 200,
+        return_images: false,
+        return_related_questions: false,
+        frequency_penalty: 1,
+        presence_penalty: 0
       }),
     })
 
     if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.status}`)
+      throw new Error(`Perplexity API error: ${response.status}`)
     }
 
     const data = await response.json()
@@ -56,7 +60,7 @@ serve(async (req) => {
     try {
       criteria = JSON.parse(content)
     } catch {
-      // Fallback if GPT doesn't return valid JSON
+      // Fallback if AI doesn't return valid JSON
       criteria = content.split('\n').filter((line: string) => line.trim()).slice(0, 5)
     }
 
