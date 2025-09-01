@@ -127,7 +127,7 @@ export const CreateRanking: React.FC<CreateRankingProps> = ({ onCreate, onCancel
   };
 
   return (
-    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
       <Card className="w-full max-w-2xl bg-gradient-card border shadow-elegant animate-slide-up">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl bg-gradient-primary bg-clip-text text-transparent">
