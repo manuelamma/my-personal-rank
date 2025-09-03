@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { StarRating } from '@/components/ui/star-rating';
 import { Upload, X, Loader2, Camera } from 'lucide-react';
@@ -20,6 +21,7 @@ export const AddItem: React.FC<AddItemProps> = ({ criteria, onAdd, onCancel }) =
   const [name, setName] = useState('');
   const [image, setImage] = useState<string>('');
   const [originalImage, setOriginalImage] = useState<string>('');
+  const [notes, setNotes] = useState('');
   const [ratings, setRatings] = useState<Record<string, number>>({});
   const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -78,6 +80,7 @@ export const AddItem: React.FC<AddItemProps> = ({ criteria, onAdd, onCancel }) =
       name: name.trim(),
       image,
       originalImage,
+      notes: notes.trim() || undefined,
       ratings,
       totalScore: calculateScore({ 
         id: '', 
@@ -183,6 +186,19 @@ export const AddItem: React.FC<AddItemProps> = ({ criteria, onAdd, onCancel }) =
                 onChange={(e) => setName(e.target.value)}
                 className="text-base"
                 autoFocus={!image}
+              />
+            </div>
+
+            {/* Notes */}
+            <div className="space-y-2">
+              <Label htmlFor="notes">Notes (optional)</Label>
+              <Textarea
+                id="notes"
+                placeholder="Add any notes about this item..."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                className="text-base resize-none"
+                rows={3}
               />
             </div>
 

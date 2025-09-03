@@ -9,6 +9,7 @@ export interface RankingItem {
   name: string;
   image?: string; // base64 or blob URL
   originalImage?: string; // before background removal
+  notes?: string; // optional notes about the item
   ratings: Record<string, number>; // criteriaId -> rating (1-10)
   totalScore: number; // calculated weighted average
   createdAt: Date;
