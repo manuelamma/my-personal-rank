@@ -20,6 +20,51 @@ const suggestedCriteria: Record<string, string[]> = {
   'movies': ['Story', 'Acting', 'Cinematography', 'Entertainment', 'Rewatch Value'],
   'laptops': ['Performance', 'Build Quality', 'Display', 'Battery', 'Portability'],
   'headphones': ['Sound Quality', 'Comfort', 'Build Quality', 'Battery Life', 'Value'],
+  'cars': ['Performance', 'Fuel Economy', 'Safety', 'Comfort', 'Reliability'],
+  'books': ['Plot Quality', 'Character Development', 'Writing Style', 'Originality', 'Engagement'],
+  'games': ['Gameplay', 'Graphics', 'Story', 'Replayability', 'Innovation'],
+  'coffee': ['Taste', 'Aroma', 'Strength', 'Smoothness', 'Value'],
+  'pizza': ['Taste', 'Crust Quality', 'Toppings', 'Cheese Quality', 'Value'],
+  'hotels': ['Service Quality', 'Cleanliness', 'Location', 'Amenities', 'Value'],
+  'wines': ['Taste', 'Aroma', 'Complexity', 'Balance', 'Value'],
+  'makeup': ['Coverage', 'Longevity', 'Color Quality', 'Application', 'Skin Compatibility'],
+  'maquilhagem': ['Cobertura', 'Durabilidade', 'Qualidade da Cor', 'Aplicação', 'Compatibilidade'],
+  'streaming': ['Content Quality', 'User Interface', 'Video Quality', 'Pricing', 'Device Support'],
+  'apps': ['User Experience', 'Functionality', 'Performance', 'Design', 'Value'],
+  'podcasts': ['Content Quality', 'Audio Quality', 'Host Chemistry', 'Frequency', 'Originality'],
+  'shoes': ['Comfort', 'Durability', 'Style', 'Quality', 'Value'],
+  'travel': ['Destinations', 'Value', 'Experience', 'Service', 'Accessibility']
+};
+
+const generateLocalSuggestions = (category: string): string[] => {
+  const lowercaseCategory = category.toLowerCase();
+  
+  // Check for exact matches first
+  for (const [key, suggestions] of Object.entries(suggestedCriteria)) {
+    if (lowercaseCategory.includes(key)) {
+      return suggestions;
+    }
+  }
+  
+  // Generate contextual suggestions based on category type
+  if (lowercaseCategory.includes('food') || lowercaseCategory.includes('restaurant') || lowercaseCategory.includes('culinary')) {
+    return ['Taste', 'Quality', 'Presentation', 'Value', 'Service'];
+  }
+  if (lowercaseCategory.includes('tech') || lowercaseCategory.includes('device') || lowercaseCategory.includes('gadget')) {
+    return ['Performance', 'Build Quality', 'User Experience', 'Battery Life', 'Value'];
+  }
+  if (lowercaseCategory.includes('beauty') || lowercaseCategory.includes('cosmetic') || lowercaseCategory.includes('skincare')) {
+    return ['Effectiveness', 'Quality', 'Skin Compatibility', 'Packaging', 'Value'];
+  }
+  if (lowercaseCategory.includes('entertainment') || lowercaseCategory.includes('media')) {
+    return ['Quality', 'Entertainment Value', 'Production', 'Originality', 'Engagement'];
+  }
+  if (lowercaseCategory.includes('service')) {
+    return ['Service Quality', 'Response Time', 'Professionalism', 'Value', 'Reliability'];
+  }
+  
+  // Default suggestions for any category
+  return ['Quality', 'Value', 'Performance', 'Design', 'Overall Experience'];
 };
 
 export const CreateRanking: React.FC<CreateRankingProps> = ({ onCreate, onCancel }) => {
@@ -48,45 +93,42 @@ export const CreateRanking: React.FC<CreateRankingProps> = ({ onCreate, onCancel
     }
   };
 
-  const generateAiSuggestions = async () => {
+  const generateAiSuggestions = () => {
     if (!category.trim()) {
       toast({
         title: "Enter a category first",
-        description: "Please enter a category to get AI suggestions",
+        description: "Please enter a category to get smart suggestions",
         variant: "destructive"
       });
       return;
     }
 
     setIsGenerating(true);
-    try {
-      const response = await fetch('/functions/v1/generate-criteria', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ category: category.trim() }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to generate suggestions');
-      }
-
-      const data = await response.json();
-      setAiSuggestions(data.criteria);
-      toast({
-        title: "AI suggestions generated!",
-        description: "Review the suggestions and add the ones you like"
-      });
-    } catch (error) {
-      toast({
-        title: "Failed to generate suggestions",
-        description: "Please try again or add criteria manually",
-        variant: "destructive"
-      });
-    } finally {
+    
+    // Simulate a brief loading for better UX
+    setTimeout(() => {
+      const suggestions = generateLocalSuggestions(category.trim());
+      // Filter out suggestions that are already added as criteria
+      const existingCriteriaNames = criteria.map(c => c.name.toLowerCase());
+      const filteredSuggestions = suggestions.filter(
+        suggestion => !existingCriteriaNames.includes(suggestion.toLowerCase())
+      );
+      
+      setAiSuggestions(filteredSuggestions);
       setIsGenerating(false);
-    }
+      
+      if (filteredSuggestions.length > 0) {
+        toast({
+          title: "Smart suggestions generated!",
+          description: "Review the suggestions and add the ones you like"
+        });
+      } else {
+        toast({
+          title: "No new suggestions",
+          description: "You've already added similar criteria, try adding custom ones",
+        });
+      }
+    }, 800);
   };
 
   const addAiSuggestion = (suggestion: string) => {
@@ -163,13 +205,13 @@ export const CreateRanking: React.FC<CreateRankingProps> = ({ onCreate, onCancel
                   className="text-xs"
                 >
                   <Sparkles className="h-3 w-3 mr-1" />
-                  {isGenerating ? 'Generating...' : 'AI Suggestions'}
+                  {isGenerating ? 'Generating...' : 'Smart Suggestions'}
                 </Button>
               </div>
 
               {aiSuggestions.length > 0 && (
                 <div className="space-y-2">
-                  <Label className="text-xs text-muted-foreground">AI Suggestions (click to add):</Label>
+                  <Label className="text-xs text-muted-foreground">Smart Suggestions (click to add):</Label>
                   <div className="flex flex-wrap gap-2">
                     {aiSuggestions.map((suggestion, index) => (
                       <Badge 
