@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { StarRating } from '@/components/ui/star-rating';
-import { ArrowLeft, Plus, List, Grid3X3, Trophy, Medal, Award, Settings } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { ArrowLeft, Plus, List, Grid3X3, Trophy, Medal, Award, Settings, FileText } from 'lucide-react';
 import { Ranking, RankingItem, ViewMode } from '@/types/ranking';
 import { sortItemsByScore, getTierLevel } from '@/utils/scoring';
 import { deleteRanking } from '@/utils/storage';
@@ -163,6 +164,18 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
                         <div className="flex items-center gap-2 mb-1 flex-wrap">
                           <h3 className="font-semibold text-base md:text-lg truncate">{item.name}</h3>
                           <Badge className={`${tier.cssClass} flex-shrink-0`}>{tier.name}</Badge>
+                          {item.notes && (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <FileText className="h-4 w-4 text-muted-foreground cursor-help flex-shrink-0" />
+                                </TooltipTrigger>
+                                <TooltipContent className="max-w-xs">
+                                  <p className="text-sm">{item.notes}</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          )}
                         </div>
                         <div className="flex items-center gap-2 md:gap-4 text-xs md:text-sm text-muted-foreground flex-wrap">
                           <StarRating 
@@ -209,7 +222,21 @@ export const RankingView: React.FC<RankingViewProps> = ({ ranking, onBack, onUpd
                                 </div>
                               )}
                               <div>
-                                <h4 className="font-medium text-sm md:text-base truncate" title={item.name}>{item.name}</h4>
+                                <div className="flex items-center gap-1 justify-center mb-1">
+                                  <h4 className="font-medium text-sm md:text-base truncate" title={item.name}>{item.name}</h4>
+                                  {item.notes && (
+                                    <TooltipProvider>
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <FileText className="h-3 w-3 text-muted-foreground cursor-help flex-shrink-0" />
+                                        </TooltipTrigger>
+                                        <TooltipContent className="max-w-xs">
+                                          <p className="text-sm">{item.notes}</p>
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    </TooltipProvider>
+                                  )}
+                                </div>
                                 <StarRating 
                                   value={item.totalScore} 
                                   onChange={() => {}} 
